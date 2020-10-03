@@ -30,7 +30,7 @@ class Twitter:
                 message = dm[x].message_create['message_data']['text']
                 message_data = str(dm[x].message_create['message_data'])
                 json_data = _json.encode_basestring(message_data)
-                if constants.First_Keyword in message or constants.Second_Keyword in message or constants.Third_keyword in message:
+                if constants.First_Keyword in message.lower() or constants.Second_Keyword in message.lower() or constants.Third_keyword in message.lower():
                     print("Getting message -> by sender id " + str(sender_id))
                     if 'attachment' not in json_data:
                         print("DM does not have any media..")
@@ -66,7 +66,7 @@ class Twitter:
             for i in range(len(dms)):
                 message = dms[i]['message']
                 sender_id = dms[i]['sender_id']
-                if constants.First_Keyword in message or constants.Second_Keyword in message:
+                if constants.First_Keyword in message.lower() or constants.Second_Keyword in message.lower():
                     try:
                         y = p+1
                         waktu = datetime.datetime.now() + datetime.timedelta(hours= 7, seconds = p*50+70)
@@ -84,7 +84,7 @@ class Twitter:
                         print(ex)
                         pass
 
-                elif constants.Third_keyword in message:
+                elif constants.Third_keyword in message.lower():
                     try:
                         p += 1
                         message1 = message.replace(constants.Third_keyword, "")
