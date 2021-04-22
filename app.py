@@ -1,5 +1,3 @@
-# v1.7.x candidate
-
 from twitter_autobase import Autobase
 from twitter_autobase import webhook_manager as webMan
 from threading import Thread

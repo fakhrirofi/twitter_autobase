@@ -106,7 +106,7 @@ def gh_database(selfAlias: object, Github_database: bool=True):
                     with open(selfAlias.DMCmd.filename_github) as f:
                         selfAlias.DMCmd.repo.update_file(contents.path, "updating Database", f.read(), contents.sha)
                         f.close()
-                    selfAlias.check_file_github(new=False)
+                    check_file_github(selfAlias, new=False)
                     print("Github Database updated")
                 
                 else:

@@ -14,7 +14,7 @@ def dm_command(selfAlias: object, sender_id: str, message: str, message_data: di
     list_command = list(selfAlias.credential.Admin_cmd) + list(selfAlias.credential.User_cmd)
     command = message.split(" ")[0].lower()
 
-    if not any(i == command for i in list_command):
+    if command not in list_command:
         return False
 
     else:
@@ -84,6 +84,12 @@ def dm_user_filter(selfAlias: object, sender_id: str, message: str) -> bool:
     if sender_id in selfAlias.credential.Admin_id:
         return False
     
+    # Ignore message when Account_status is False
+    if not selfAlias.credential.Account_status:
+        print("Account_status: False")
+        selfAlias.send_dm(sender_id, selfAlias.credential.Notify_accountStatus)
+        return True   
+
     # Interval time per sender
     if selfAlias.credential.Interval_perSender:
         date_now = datetime.now(timezone.utc) + timedelta(hours=selfAlias.credential.Timezone)
@@ -256,17 +262,7 @@ def process_dm(selfAlias: object, raw_dm: dict) -> list:
 
         # Avoid keyword error & loop messages by skipping bot messages
         if sender_id in selfAlias.prevent_loop:
-            return list()
-            
-        # Ignore message when Account_status is False
-        if not selfAlias.credential.Account_status:
-            if sender_id not in selfAlias.credential.Admin_id:
-                print("Account_status: False")
-                selfAlias.send_dm(sender_id, selfAlias.credential.Notify_accountStatus)
-                return list()
-
-            print("Account_status: False, admin sends menfess")            
-
+            return list()     
         print(f"Processing direct message, sender_id: {sender_id}")
 
         # ADMIN & USER COMMAND
