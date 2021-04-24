@@ -42,65 +42,7 @@ class Twitter:
             auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
         self.api.verify_credentials()
         self.me = self.api.me()
-    
 
-    def get_all_followers(self, user_id: str, first_delay: bool=True) -> list:
-        '''Get all followers ids, Twitter API limits to get 5000 followers/minute
-        :param first_delay: False: delete delay for the first get request
-        :return: list of followers ids integer
-        '''
-        try:
-            print("Getting all followers ids...")
-            ids = list()
-            for page in Cursor(self.api.followers_ids, user_id=user_id).pages():
-                ids.extend(page)
-                if first_delay is False:
-                    first_delay = True
-                    continue
-                sleep(60)
-            return ids
-
-        except Exception as ex:
-            pass
-            print(ex)
-            sleep(60)
-            return list()
-
-    
-    def get_all_followed(self, user_id: str, first_delay: bool=True) -> list:
-        '''Get all user ids that followed by bot, Twitter api limits to get 5000 followed/minute
-        :param first_delay: False: delete delay for the first get
-        :return: list of followers ids integer
-        '''
-        try:
-            print("Getting all friends ids...")
-            ids = list()
-            for page in Cursor(self.api.friends_ids, user_id=user_id).pages():
-                ids.extend(page)
-                if first_delay is False:
-                    first_delay = True
-                    continue
-                sleep(60)
-            return ids
-
-        except Exception as ex:
-            pass
-            print(ex)
-            sleep(60)
-            return list()
-
-
-    def delete_dm(self, id: str) -> NoReturn:
-        '''
-        :param id: message id
-        '''
-        try:
-            self.api.destroy_direct_message(id)
-        except Exception as ex:
-            print(ex)
-            sleep(60)
-            pass
-    
     
     def send_dm(self, recipient_id: str, text: str) -> NoReturn:
         '''
@@ -256,7 +198,7 @@ class Twitter:
     def post_tweet(self, tweet: str, sender_id: str, media_url: str=None, attachment_url: str=None,
                 media_idsAndTypes: list=list(), possibly_sensitive: bool=False) -> dict:
         '''Post a tweet, contains watermark module
-        Per tweet delay is 36s + self.random_time, but the last delay is deleted
+        Per tweet delay is 36s + self.random_time
         :param tweet: message
         :param media_url: url of the media that sent from dm
         :param attachment_url: url that will be attached to twett (retweet)
@@ -265,6 +207,7 @@ class Twitter:
         :return: {'postid': '', 'error_code': ''} -> dict
         '''
         try:
+            sleep(36+self.credential.Delay_time)
             #### ADD MEDIA_ID AND MEDIA_TYPE TO LIST_MEDIA_IDS ####
             # media_idsAndTypes e.g. [(media_id, media_type), (media_id, media_type), ]
             if media_url != None:

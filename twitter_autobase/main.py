@@ -119,7 +119,7 @@ class Autobase(Twitter):
         :param queue: the current queue (len of current self.dms)
         """
         try:
-            x, y, z = -1 + queue, queue, 0
+            x, y, z = queue, queue, 0
             # x is primary time (36 sec); y is queue; z is addition time for media
             time = datetime.now(timezone.utc) + timedelta(hours=self.credential.Timezone)
             for i in dms:
@@ -130,10 +130,6 @@ class Autobase(Twitter):
                 
                 if self.credential.Private_mediaTweet:
                     z += len(i['attachment_urls']['media']) * 3
-
-                # Delay for the first sender (no thread) is very quick, so, it won't be notified
-                if x == 0:
-                    continue
 
                 sent_time = time + timedelta(seconds= x*(37+self.credential.Delay_time) + z)
                 sent_time = datetime.strftime(sent_time, '%H:%M')
@@ -167,7 +163,6 @@ class Autobase(Twitter):
     def start_autobase(self) -> NoReturn:
         '''
         Process data from self.dms, the process must be separated by Thread or Process(if there is a Database app i.e. Postgres)
-        The last self.post_tweet delay is moved here to reduce the delay before posting menfess
         '''
         print("Starting autobase...")
 
@@ -220,8 +215,6 @@ class Autobase(Twitter):
                     else:
                         # credential.Notify_sent is False
                         pass
-                            
-                    sleep(36+self.credential.Delay_time)
 
                 except Exception as ex:
                     text = self.credential.Notify_sentFail1 + "\nerror_code: start_autobase, " + str(ex)
@@ -231,7 +224,7 @@ class Autobase(Twitter):
 
                 finally:
                     # self.notify_queue is using len of dms to count queue, it's why the dms.pop(0) here
-                    self.dms.pop(0)
+                    del self.dms[0]
 
             sleep(2)
     
