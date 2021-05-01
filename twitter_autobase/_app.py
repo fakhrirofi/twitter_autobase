@@ -1,9 +1,9 @@
 from requests import post
 from threading import Thread
 from time import sleep
-from autobase import Autobase
-from autobase import webhook_manager as webMan
-import _config
+from .autobase import Autobase
+from .autobase import webhook_manager as webMan
+from . import _config
 import logging
 logging.basicConfig(level=logging.WARNING, format="%(name)s - %(levelname)s - %(message)s")
 

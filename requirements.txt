@@ -1,4 +1,8 @@
 flask==1.1.2
+flask-login==0.5.0
+flask-migrate==2.7.0
+flask-sqlalchemy==2.5.1
+flask-wtf==0.14.3
 oauth2==1.9.0.post1
 Pillow==8.2.0
 pyngrok==5.0.5
